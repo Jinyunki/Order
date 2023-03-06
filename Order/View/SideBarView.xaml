@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="Order.View.SideBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Order.View"
+             xmlns:view="clr-namespace:Order.View"
+             xmlns:vm="clr-namespace:Order.ViewModel" 
+             xmlns:OrderView="clr-namespace:Order.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="850" Background="White"
+             DataContext="{Binding Source={StaticResource Locator} ,Path=SideBarViewModel}"
+             >
+    <!--DataContext="{Binding Source={StaticResource Locator}, Path=SideBarViewModel}"-->
+
+    <UserControl.Resources >
+        <DataTemplate DataType="{x:Type vm:RealTimeViewModel}">
+            <view:RealTime />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ActionHistoryViewModel}">
+            <view:ActionHistory />
+        </DataTemplate>
+        
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BasedButtonStyle}">
+            <Setter Property="Width" Value="150" />
+            <Setter Property="Height" Value="120" />
+            <Setter Property="Background" Value="Coral" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Red" />
+                    <Setter Property="Foreground" Value="Yellow" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="9*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <!--RealTime-->
+            <Grid Grid.Row="0">
+                <Button Content="실시간 현황" Background="White"
+                        Command="{Binding ViewChangeCommand}" 
+                        CommandParameter="RealTimeViewModel"/>
+            </Grid>
+
+            <!--History-->
+            <Grid Grid.Row="1">
+                <Button Content="조치 내역" Background="White"
+                        Command="{Binding ViewChangeCommand}"
+                        CommandParameter="ActionHistoryViewModel"/>
+            </Grid>
+
+            <!--Third-->
+            <Grid Grid.Row="2">
+                <Button Content="통계" Background="White"/>
+            </Grid>
+            <!--Fourd-->
+            <Grid Grid.Row="3">
+                <Button Content="주의 사항" Background="White"/>
+            </Grid>
+
+            <!--Last-->
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <ScrollViewer>
+                <ContentControl 
+                    Content="{Binding CurrentViewModel, UpdateSourceTrigger=PropertyChanged}"/>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

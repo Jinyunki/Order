@@ -1,0 +1,32 @@
+﻿<Window x:Class="Order.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:view="clr-namespace:Order.View"
+        xmlns:local="clr-namespace:Order"
+
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <!--Main View-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*" />
+            <RowDefinition Height="85*" />
+        </Grid.RowDefinitions>
+
+        <!--UnderView-->
+        <Grid Grid.Row="0">
+            <view:UnderBarView/>
+        </Grid>
+
+        <!--Body View-->
+        <Grid Grid.Row="1" Margin="0 10 0 0">
+            <!--Menu View-->
+            <Grid Grid.Column="0">
+                <view:SideBarView/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
