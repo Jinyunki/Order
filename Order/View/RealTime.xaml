@@ -5,71 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Order.View"
              xmlns:model="clr-namespace:Order.Model"
-             mc:Ignorable="d" Background="White"
-             d:DesignHeight="800" d:DesignWidth="700"
-             Height="800" 
+             mc:Ignorable="d" Background="Green"
+             d:DesignHeight="450" d:DesignWidth="450" 
              DataContext="{Binding Source={StaticResource Locator}, Path=SideBarViewModel}">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-
-        <Grid Grid.Column="0" Grid.Row="0" Background="White">
-            <TextBlock Text="{Binding Message,UpdateSourceTrigger=PropertyChanged}"/>
-        </Grid>
-
-        <Grid Grid.Column="1" Grid.Row="0" Background="Red">
-
-        </Grid>
-
-        <Grid Grid.Column="2" Grid.Row="0" Background="Orange">
-            <TextBlock Text="test3"/>
-        </Grid>
-
-        <Grid Grid.Column="0" Grid.Row="1" Background="Yellow">
-            <TextBlock Text="test1"/>
-        </Grid>
-
-        <Grid Grid.Column="1" Grid.Row="1" Background="Green">
-            <TextBlock Text="test2"/>
-        </Grid>
-
-        <Grid Grid.Column="2" Grid.Row="1" Background="Blue">
-            <TextBlock Text="test3"/>
-        </Grid>
-
-
-
-        <Grid Grid.Column="0" Grid.Row="2" Background="White">
-            <TextBlock Text="test1"/>
-        </Grid>
-
-        <Grid Grid.Column="1" Grid.Row="2" Background="Red">
-
-        </Grid>
-
-        <Grid Grid.Column="2" Grid.Row="2" Background="Orange">
-            <TextBlock Text="test3"/>
-        </Grid>
-
-        <Grid Grid.Column="0" Grid.Row="3" Background="Yellow">
-            <TextBlock Text="test1"/>
-        </Grid>
-
-        <Grid Grid.Column="1" Grid.Row="3" Background="Green">
-            <TextBlock Text="test2"/>
-        </Grid>
-
-        <Grid Grid.Column="2" Grid.Row="3" Background="Blue">
-            <TextBlock Text="test3"/>
-        </Grid>
+        <TextBlock Text="{Binding Message,UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </UserControl>

@@ -20,19 +20,13 @@
         <DataTemplate DataType="{x:Type vm:ActionHistoryViewModel}">
             <view:ActionHistory />
         </DataTemplate>
-        
-        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BasedButtonStyle}">
-            <Setter Property="Width" Value="150" />
-            <Setter Property="Height" Value="120" />
-            <Setter Property="Background" Value="Coral" />
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="Red" />
-                    <Setter Property="Foreground" Value="Yellow" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        
+        <DataTemplate DataType="{x:Type vm:AA1ViewModel}">
+            <view:AA1 />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AA2ViewModel}">
+            <view:AA2 />
+        </DataTemplate>
+
     </UserControl.Resources>
     
     <Grid>
@@ -52,8 +46,8 @@
             <!--RealTime-->
             <Grid Grid.Row="0">
                 <Button Content="실시간 현황" Background="White"
-                        Command="{Binding ViewChangeCommand}" 
-                        CommandParameter="RealTimeViewModel"/>
+                        Command="{Binding ViewChangeCommand}"
+                        CommandParameter="MainGoBack"/>
             </Grid>
 
             <!--History-->
@@ -65,7 +59,9 @@
 
             <!--Third-->
             <Grid Grid.Row="2">
-                <Button Content="통계" Background="White"/>
+                <Button Content="통계" Background="White"
+                        Command="{Binding ViewChangeCommand}" 
+                        CommandParameter="RealTimeViewModel"/>
             </Grid>
             <!--Fourd-->
             <Grid Grid.Row="3">
@@ -83,9 +79,55 @@
 
         <Grid Grid.Column="1">
             <ScrollViewer>
-                <ContentControl 
-                    Content="{Binding CurrentViewModel, UpdateSourceTrigger=PropertyChanged}"/>
+                <Grid Visibility="{Binding IsVisibleContent, 
+                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ContentControl Content="{Binding CurrentViewModel, 
+                        UpdateSourceTrigger=PropertyChanged}"/>
+                </Grid>
             </ScrollViewer>
+
+            <ScrollViewer>
+                <Grid Visibility="{Binding IsVisibleGrid, 
+                    Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Background="#e9e9e9" ShowGridLines="True">
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <!--ContentControll로 들어왔던뷰 메모로 옮겨둠-->
+
+
+                    <ContentControl Grid.Column="0" Grid.Row="0" 
+                                Content="{Binding AA1, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ContentControl Grid.Column="1" Grid.Row="0" 
+                                Content="{Binding AA2, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ContentControl Grid.Column="2" Grid.Row="0" 
+                                Content="{Binding AA3, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <ContentControl Grid.Column="0" Grid.Row="1" 
+                                Content="{Binding AA4, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ContentControl Grid.Column="1" Grid.Row="1" 
+                                Content="{Binding AA5, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ContentControl Grid.Column="2" Grid.Row="1" 
+                                Content="{Binding AA6, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <ContentControl Grid.Column="0" Grid.Row="2" 
+                                Content="{Binding AA7, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ContentControl Grid.Column="1" Grid.Row="2" 
+                                Content="{Binding AA8, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ContentControl Grid.Column="2" Grid.Row="2" 
+                                Content="{Binding AA9, UpdateSourceTrigger=PropertyChanged}"/>
+
+                </Grid>
+            </ScrollViewer>
+            
         </Grid>
     </Grid>
 </UserControl>

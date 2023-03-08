@@ -14,14 +14,13 @@
 
 using CommonServiceLocator;
 using GalaSoft.MvvmLight.Ioc;
-using Order.Model;
 
 namespace Order.ViewModel {
     /// <summary>
     /// This class contains static references to all the view models in the
     /// application and provides an entry point for the bindings.
     /// </summary>
-    public class ViewModelLocator : MainModel {
+    public class ViewModelLocator {
         /// <summary>
         /// Initializes a new instance of the ViewModelLocator class.
         /// </summary>
@@ -33,6 +32,24 @@ namespace Order.ViewModel {
             SimpleIoc.Default.Register<SideBarViewModel>();
             SimpleIoc.Default.Register<RealTimeViewModel>();
             SimpleIoc.Default.Register<ActionHistoryViewModel>();
+            SimpleIoc.Default.Register<AA1ViewModel>();
+            SimpleIoc.Default.Register<AA2ViewModel>();
+        }
+        static ViewModelLocator() {
+            SimpleIoc.Default.Register<AA1ViewModel>();
+            SimpleIoc.Default.Register(() => new AA1ViewModel(), "NewInstance");
+        }
+
+
+        public AA2ViewModel AA2ViewModel {
+            get {
+                return ServiceLocator.Current.GetInstance<AA2ViewModel>();
+            }
+        }
+        public AA1ViewModel AA1ViewModel {
+            get {
+                return ServiceLocator.Current.GetInstance<AA1ViewModel>();
+            }
         }
 
         public ActionHistoryViewModel ActionHistoryViewModel {
@@ -67,6 +84,7 @@ namespace Order.ViewModel {
 
         public static void Cleanup() {
             // TODO Clear the ViewModels
+            ServiceLocator.Current.GetInstance<AA1ViewModel>().Cleanup();
         }
     }
 }

@@ -24,6 +24,7 @@
         <!--Body View-->
         <Grid Grid.Row="1" Margin="0 10 0 0">
             <!--Menu View-->
+            
             <Grid Grid.Column="0">
                 <view:SideBarView/>
             </Grid>

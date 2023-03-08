@@ -5,10 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:Order="clr-namespace:Order">
+             xmlns:Order="clr-namespace:Order" xmlns:converters="clr-namespace:Order.Converters">
   <Application.Resources>
         <ResourceDictionary>
             <vm:ViewModelLocator x:Key="Locator" xmlns:vm="clr-namespace:Order.ViewModel" />
+            
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             
             <Style x:Key="BasedButtonStyle" TargetType="{x:Type Button}">
                 <Setter Property="Cursor" Value="Hand" />
@@ -20,6 +22,7 @@
                 <Setter Property="VerticalContentAlignment" Value="Center" />
                 <Setter Property="BorderBrush" Value="Transparent" />
             </Style>
+            
         </ResourceDictionary>
   </Application.Resources>
 </Application>
