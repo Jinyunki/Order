@@ -7,22 +7,18 @@
              mc:Ignorable="d" Background="White"
              d:DesignHeight="500" d:DesignWidth="700"
              Height="800" 
-             DataContext="{Binding Source={StaticResource Locator}, Path=ActionHistoryViewModel}">
+             DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
     <Grid>
         <DataGrid x:Name="uiGrid_Main" Grid.ColumnSpan="3" Margin="5"
                               CanUserAddRows="False"
                               AutoGenerateColumns="False"  VerticalAlignment="Top"
-                              SelectedIndex="{Binding Path=SelectedIndex,Mode=TwoWay,
-                              UpdateSourceTrigger=PropertyChanged}"
-                              
-                              SelectedValuePath="SelectedValue"
-                              ItemsSource="{Binding Path= SampleDatas, Mode=TwoWay,
+                              ItemsSource="{Binding Path= DataGridItem, Mode=TwoWay,
                               NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}">
             <DataGrid.Columns>
-                <DataGridTextColumn MinWidth="10" Width="1*" Header="No" Binding="{Binding Type}"/>
-                <DataGridTextColumn MinWidth="10" Width="1*" Header="이름" Binding="{Binding Type}"/>
-                <DataGridTextColumn MinWidth="10" Width="3*" Header="MEMO" Binding="{Binding Memo}"/>
-                <DataGridTextColumn MinWidth="10" Width="1*" Header="DATE" Binding="{Binding dateTime}"/>
+                <DataGridTextColumn MinWidth="10" Width="1*" Header="설비명" Binding="{Binding ItemTitle}"/>
+                <DataGridTextColumn MinWidth="10" Width="1*" Header="Order" Binding="{Binding OrderTime}"/>
+                <DataGridTextColumn MinWidth="10" Width="1*" Header="Clear" Binding="{Binding OrderClearTime}"/>
+                
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

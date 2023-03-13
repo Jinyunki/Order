@@ -1,6 +1,7 @@
 using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Order.ViewModel {
         private TcpClient client;
         private ClientData clientData;
         private Dictionary<int, IViewModelBase> _iViewModelBases = new Dictionary<int, IViewModelBase>();
-        public Dictionary<int, ViewModelBase> _viewModels = new Dictionary<int, ViewModelBase>();
+        //public Dictionary<int, ViewModelBase> _viewModels = new Dictionary<int, ViewModelBase>();
         public MainViewModel() {
             initViewModelBases();
             initThread();
@@ -21,8 +22,9 @@ namespace Order.ViewModel {
 
         private void initViewModelBases() {
             for (int i = 0; i < 9; i++) {
-                _iViewModelBases[i] = new IViewModelBase();
-                _viewModels[i] = _iViewModelBases[i];
+                var viewModel = new IViewModelBase();
+                _iViewModelBases[i] = viewModel;
+                //_viewModels[i] = _iViewModelBases[i];
             }
         }
 
@@ -62,6 +64,8 @@ namespace Order.ViewModel {
             }
         }
 
+
+        public ObservableCollection<IViewModelBase> DataGridItem { get; set; }
         public void ReadMsgNumber(int clientNumber, string readString) {
             int idx = clientNumber - 1;
             IViewModelBase viewModel = _iViewModelBases[idx];
@@ -69,10 +73,21 @@ namespace Order.ViewModel {
 
             if (readString == "Order") {
                 viewModel.OrderCount++;
+                viewModel.OrderTime = DateTime.Now.ToString("hh:mm:tt");
+                viewModel.ItemTitle = viewModel.ItemTitle;
             } else if (readString == "Clear") {
                 viewModel.OrderClearCount++;
+                viewModel.OrderClearTime = DateTime.Now.ToString("hh:mm:tt");
+                viewModel.ItemTitle = viewModel.ItemTitle;
             }
+
             AddViewChange(viewModel, clientNumber);
+
+            // 2023.03.13 스터디 종료 , 현재 아래 코드 현재 하나만 구현가능 반복적인 작업 수행하기위한 코드 진행해야함 
+
+            DataGridItem = new ObservableCollection<IViewModelBase>() {
+                new IViewModelBase{ ItemTitle = viewModel.ItemTitle, OrderTime = viewModel.OrderTime , OrderClearTime = viewModel.OrderClearTime }
+            };
         }
 
         public void AddViewChange(IViewModelBase viewModels, int clientNumber) {

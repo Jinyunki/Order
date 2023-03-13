@@ -7,9 +7,9 @@ namespace Order.ViewModel {
         private ViewModelLocator _locator = new ViewModelLocator();
         public SideBarViewModel() {
             _messageBoxService = new MessageBoxService();
-            initButtonEvent();
             IsVisibleContent = false;
             IsVisibleGrid = true;
+            initButtonEvent();
         }
 
         // === Visibllity Item === 
@@ -62,9 +62,10 @@ namespace Order.ViewModel {
         public RelayCommand<string> ViewChangeCommand {
             get {
                 return new RelayCommand<string>((confType) => {
-                    if (confType == "MainGoBack") {
+                    if (confType == "RealTimeView") {
                         IsVisibleContent = false;
                         IsVisibleGrid = true;
+                        //CurrentViewModel = _locator.RealTimeViewModel;
                     } else if (confType == "ActionHistoryViewModel") {
                         IsVisibleContent = true;
                         IsVisibleGrid = false;
@@ -80,15 +81,15 @@ namespace Order.ViewModel {
 
         // Event Method
         private void initButtonEvent() {
-            //_btnRealTime = new Command<RealTimeViewModel>(CommandExecute, CommandCanExecute);
+            _btnRealTime = new Command<RealTimeViewModel>(CommandExecute, CommandCanExecute);
             _btnActionHistor = new Command<ActionHistoryViewModel>(CommandExecuteAction, CommandCanExecute);
         }
         private void CommandExecuteAction(ActionHistoryViewModel obj) {
             this.CurrentViewModel = obj;
         }
-        /*private void CommandExecute(RealTimeViewModel obj) {
+        private void CommandExecute(RealTimeViewModel obj) {
             this.CurrentViewModel = obj;
-        }*/
+        }
         private bool CommandCanExecute(object param) {
             return true;
         }

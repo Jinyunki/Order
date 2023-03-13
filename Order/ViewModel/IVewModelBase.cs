@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -48,6 +49,16 @@ namespace Order.ViewModel {
             }
         }
 
+        private string _orderTime ;
+        public string OrderTime {
+            get => _orderTime;
+            set {
+                if (_orderTime == value)
+                    return;
+                _orderTime = value;
+                OnPropertyChanged(nameof(OrderTime));
+            }
+        }
         private int _orderClearCount = 0;
         public int OrderClearCount {
             get {
@@ -61,6 +72,16 @@ namespace Order.ViewModel {
             }
         }
 
+        private string _orderClearTime ;
+        public string OrderClearTime {
+            get => _orderClearTime;
+            set {
+                if (_orderClearTime == value)
+                    return;
+                _orderClearTime = value;
+                OnPropertyChanged(nameof(OrderClearTime));
+            }
+        }
 
 
 

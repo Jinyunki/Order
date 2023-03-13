@@ -41,7 +41,7 @@
             <Grid Grid.Row="0">
                 <Button Content="실시간 현황" Background="White"
                         Command="{Binding ViewChangeCommand}"
-                        CommandParameter="MainGoBack"/>
+                        CommandParameter="RealTimeView"/>
             </Grid>
 
             <!--History-->
