@@ -32,24 +32,6 @@ namespace Order.ViewModel {
             SimpleIoc.Default.Register<SideBarViewModel>();
             SimpleIoc.Default.Register<RealTimeViewModel>();
             SimpleIoc.Default.Register<ActionHistoryViewModel>();
-            SimpleIoc.Default.Register<AA1ViewModel>();
-            SimpleIoc.Default.Register<AA2ViewModel>();
-        }
-        static ViewModelLocator() {
-            SimpleIoc.Default.Register<AA1ViewModel>();
-            SimpleIoc.Default.Register(() => new AA1ViewModel(), "NewInstance");
-        }
-
-
-        public AA2ViewModel AA2ViewModel {
-            get {
-                return ServiceLocator.Current.GetInstance<AA2ViewModel>();
-            }
-        }
-        public AA1ViewModel AA1ViewModel {
-            get {
-                return ServiceLocator.Current.GetInstance<AA1ViewModel>();
-            }
         }
 
         public ActionHistoryViewModel ActionHistoryViewModel {
@@ -84,7 +66,6 @@ namespace Order.ViewModel {
 
         public static void Cleanup() {
             // TODO Clear the ViewModels
-            ServiceLocator.Current.GetInstance<AA1ViewModel>().Cleanup();
         }
     }
 }

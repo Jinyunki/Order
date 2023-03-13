@@ -5,10 +5,42 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Order.View"
              xmlns:model="clr-namespace:Order.Model"
-             mc:Ignorable="d" Background="Green"
-             d:DesignHeight="450" d:DesignWidth="450" 
-             DataContext="{Binding Source={StaticResource Locator}, Path=SideBarViewModel}">
+             xmlns:view="clr-namespace:Order.View"
+             mc:Ignorable="d" Background="Gray"
+             d:DesignHeight="450" d:DesignWidth="450"
+             DataContext="{Binding Source={StaticResource Locator} ,Path=Main}">
     <Grid>
-        <TextBlock Text="{Binding Message,UpdateSourceTrigger=PropertyChanged}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <view:RealTimeItemView Grid.Column="0" Grid.Row="0"
+                               DataContext="{Binding CurrentViewModel}"/>
+        <view:RealTimeItemView Grid.Column="1" Grid.Row="0"
+                               DataContext="{Binding CurrentViewModel2}"/>
+        <view:RealTimeItemView Grid.Column="2" Grid.Row="0"
+                               DataContext="{Binding CurrentViewModel3}"/>
+
+        <view:RealTimeItemView Grid.Column="0" Grid.Row="1"
+                               DataContext="{Binding CurrentViewModel4}"/>
+        <view:RealTimeItemView Grid.Column="1" Grid.Row="1"
+                               DataContext="{Binding CurrentViewModel5}"/>
+        <view:RealTimeItemView Grid.Column="2" Grid.Row="1"
+                               DataContext="{Binding CurrentViewModel6}"/>
+
+        <view:RealTimeItemView Grid.Column="0" Grid.Row="2"
+                               DataContext="{Binding CurrentViewModel7}"/>
+        <view:RealTimeItemView Grid.Column="1" Grid.Row="2"
+                               DataContext="{Binding CurrentViewModel8}"/>
+        <view:RealTimeItemView Grid.Column="2" Grid.Row="2"
+                               DataContext="{Binding CurrentViewModel9}"/>
+
     </Grid>
 </UserControl>

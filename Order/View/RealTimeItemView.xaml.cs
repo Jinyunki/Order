@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace Order.View {
     /// <summary>
-    /// AA2.xaml에 대한 상호 작용 논리
+    /// RealTimeItemView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class AA2 : UserControl {
-        public AA2() {
+    public partial class RealTimeItemView : UserControl {
+        public RealTimeItemView() {
             InitializeComponent();
         }
     }
