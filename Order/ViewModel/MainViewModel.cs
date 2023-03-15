@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 
 namespace Order.ViewModel {
+    //branch Test
     public class MainViewModel : IViewModelBase {
         private TcpListener listener;
         private Thread thr;
