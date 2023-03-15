@@ -21,6 +21,10 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
+        <!--<Grid Grid.Column="0" Grid.Row="0">
+            <ContentControl Content="{Binding CurrentViewModel, 
+                        UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>-->
         <view:RealTimeItemView Grid.Column="0" Grid.Row="0"
                                DataContext="{Binding CurrentViewModel}"/>
         <view:RealTimeItemView Grid.Column="1" Grid.Row="0"

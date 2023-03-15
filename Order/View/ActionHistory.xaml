@@ -9,16 +9,17 @@
              Height="800" 
              DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
     <Grid>
-        <DataGrid x:Name="uiGrid_Main" Grid.ColumnSpan="3" Margin="5"
-                              CanUserAddRows="False"
-                              AutoGenerateColumns="False"  VerticalAlignment="Top"
-                              ItemsSource="{Binding Path= DataGridItem, Mode=TwoWay,
-                              NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}">
+        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False"
+                  VerticalAlignment="Top" 
+                  ItemsSource="{Binding Path = DataGridItem, Mode=TwoWay,
+                  NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}">
             <DataGrid.Columns>
-                <DataGridTextColumn MinWidth="10" Width="1*" Header="설비명" Binding="{Binding ItemTitle}"/>
-                <DataGridTextColumn MinWidth="10" Width="1*" Header="Order" Binding="{Binding OrderTime}"/>
-                <DataGridTextColumn MinWidth="10" Width="1*" Header="Clear" Binding="{Binding OrderClearTime}"/>
-                
+                <DataGridTextColumn MinWidth="10" Width="1*" 
+                                    Header="설비명" Binding="{Binding GridTitle}"/>
+                <DataGridTextColumn MinWidth="10" Width="1*" Foreground="Red"
+                                    Header="Order" Binding="{Binding OrderTime}"/>
+                <DataGridTextColumn MinWidth="10" Width="1*" Foreground="Blue"
+                                    Header="Clear" Binding="{Binding OrderClearTime}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

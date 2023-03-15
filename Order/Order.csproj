@@ -78,9 +78,11 @@
     <Compile Include="Command.cs" />
     <Compile Include="Model\MainModel.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="Utiles\IDispatcher.cs" />
     <Compile Include="Utiles\IMessageBoxService.cs" />
     <Compile Include="ViewModel\ActionHistoryViewModel.cs" />
     <Compile Include="ViewModel\IVewModelBase.cs" />
+    <Compile Include="ViewModel\RealTimeItemViewModel.cs" />
     <Compile Include="ViewModel\RealTimeViewModel.cs" />
     <Compile Include="ViewModel\SideBarViewModel.cs" />
     <Compile Include="Model\UnderBarModel.cs" />

@@ -21,6 +21,35 @@ namespace Order.ViewModel {
             OrderClearCount = orderClearCount;
         }
 
+        private int _totalOrder = 0;
+
+        public int TotalOrder {
+            get { return _totalOrder; }
+            set {
+                if (_totalOrder == value) {
+                    return;
+                } else {
+                    _totalOrder = value;
+                    OnPropertyChanged("TotalOrder");
+                }
+            }
+        }
+
+        private int _totalClear = 0;
+
+        public int TotalClear {
+            get { return _totalClear; }
+            set {
+                if (_totalClear == value) {
+                    return;
+                } else {
+                    _totalClear = value;
+                    OnPropertyChanged("TotalClear");
+                }
+            }
+        }
+
+
         private string _itemTitle;
         public string ItemTitle {
             get {
@@ -33,7 +62,6 @@ namespace Order.ViewModel {
                 OnPropertyChanged("ItemTitle");
             }
         }
-
         
 
         private int _orderCount = 0;
@@ -49,16 +77,7 @@ namespace Order.ViewModel {
             }
         }
 
-        private string _orderTime ;
-        public string OrderTime {
-            get => _orderTime;
-            set {
-                if (_orderTime == value)
-                    return;
-                _orderTime = value;
-                OnPropertyChanged(nameof(OrderTime));
-            }
-        }
+        
         private int _orderClearCount = 0;
         public int OrderClearCount {
             get {
@@ -71,19 +90,6 @@ namespace Order.ViewModel {
                 OnPropertyChanged("OrderClearCount");
             }
         }
-
-        private string _orderClearTime ;
-        public string OrderClearTime {
-            get => _orderClearTime;
-            set {
-                if (_orderClearTime == value)
-                    return;
-                _orderClearTime = value;
-                OnPropertyChanged(nameof(OrderClearTime));
-            }
-        }
-
-
 
         private bool _isConnected = false;
         public bool IsConnected {

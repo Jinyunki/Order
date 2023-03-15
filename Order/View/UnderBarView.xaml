@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Order.View"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="800" Background="White"
-             DataContext="{Binding Source={StaticResource Locator}, Path=UnderBarViewModel}">
+             DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -14,17 +14,17 @@
         </Grid.ColumnDefinitions>
 
         <!--상단바 좌측,(대응 닫기)-->
-        <Grid Grid.Row="0" Grid.Column="0" Background="Black">
-            <TextBlock Text="대응" Background="White" Padding="10"
+        <Grid Grid.Row="0" Grid.Column="0" >
+            <TextBlock Text="Test" Background="White" Padding="10"
                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
 
         <!--상단바 메뉴얼-->
         <Grid Grid.Row="0" Grid.Column="1" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
             <!--상단바 메뉴얼 1st ,해당 발생 설비안내-->
@@ -34,55 +34,37 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
 
-                <!--메뉴얼 1st 위-->
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="9*"/>
-                    </Grid.ColumnDefinitions>
-                    <!--1st 위 좌측 알람깜빡이-->
-                    <Grid Grid.Column="0" >
-                        <Button Background="#00ff00" Height="8" Width="8" VerticalAlignment="Center"/>
-                    </Grid>
+                <!--TotalOrder-->
+                <TextBlock Grid.Row="0" Text="Today Order " 
+                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <!--TotalOrder-->
+                <TextBlock Grid.Row="1" Text="Today Clear " 
+                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
-                    <!--1st 위 좌측 진행상황-->
-                    <Grid Grid.Column="1" >
-                        <TextBlock Text="{Binding Facilities}" VerticalAlignment="Center"/>
-                    </Grid>
-                </Grid>
-
-                <!--메뉴얼 1st 아래-->
-                <Grid Grid.Row="1">
-                    <TextBlock Text="새로고침" TextAlignment="Center"
-                                   VerticalAlignment="Center" Width="70" HorizontalAlignment="Left" 
-                                   Background="White" Margin="1" Padding="5"/>
-                </Grid>
             </Grid>
             <!--상단바 메뉴얼 2st ,조취 시간-->
-            <Grid Grid.Column="1" Background="OrangeRed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="8*"/>
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock Text="조치&#10;진행 시간" TextAlignment="Center"/>
-                </Grid>
+            <Grid Grid.Column="1" ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
 
-                <Grid Grid.Column="1" VerticalAlignment="Center">
-                    <ProgressBar Height="20" Margin="10"/>
-                </Grid>
+                <ProgressBar Grid.Row="0" Maximum="100" Value="{Binding TotalOrder}"
+                             Foreground="Red" Background="White"/>
+                <ProgressBar Grid.Row="1" Maximum="100" Value="{Binding TotalClear}" 
+                             Foreground="Blue" Background="White"/>
             </Grid>
-            <!--상단바 메뉴얼 3st ,현재 시간-->
+            <!--TotalCount-->
             <Grid Grid.Column="2" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
-                    <TextBlock Text="처리 건수" Background="Beige"/>
+                    <TextBlock Text="Total Order : "  VerticalAlignment="Center" Background="Beige"/>
                 </Grid>
                 <Grid Grid.Row="1">
-                    <Label Content="{Binding DateTime}"/>
+                    <TextBlock Text="Total Clear : "  VerticalAlignment="Center" Background="Beige"/>
                 </Grid>
             </Grid>
         </Grid>

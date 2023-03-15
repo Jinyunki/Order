@@ -4,11 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:Order.View"
-        xmlns:local="clr-namespace:Order"
+        xmlns:vm="clr-namespace:Order.ViewModel" 
 
         DataContext="{Binding Main, Source={StaticResource Locator}}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:UnderBarViewModel}">
+            <view:UnderBarView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:SideBarViewModel}">
+            <view:SideBarView />
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <!--Main View-->
         <Grid.RowDefinitions>
@@ -18,7 +27,7 @@
 
         <!--UnderView-->
         <Grid Grid.Row="0">
-            <view:UnderBarView/>
+            <view:UnderBarView DataContext="{Binding UnderBarViewModel}"/>
         </Grid>
 
         <!--Body View-->

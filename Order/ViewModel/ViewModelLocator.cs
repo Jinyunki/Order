@@ -14,6 +14,7 @@
 
 using CommonServiceLocator;
 using GalaSoft.MvvmLight.Ioc;
+using Order.Utiles;
 
 namespace Order.ViewModel {
     /// <summary>
@@ -27,11 +28,21 @@ namespace Order.ViewModel {
         public ViewModelLocator() {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
+
+            SimpleIoc.Default.Register<IDispatcher, DispatcherWrapper>();
+
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<UnderBarViewModel>();
             SimpleIoc.Default.Register<SideBarViewModel>();
             SimpleIoc.Default.Register<RealTimeViewModel>();
             SimpleIoc.Default.Register<ActionHistoryViewModel>();
+            SimpleIoc.Default.Register<RealTimeItemViewModel>();
+        }
+
+        public RealTimeItemViewModel RealTimeItemViewModel {
+            get {
+                return ServiceLocator.Current.GetInstance<RealTimeItemViewModel>();
+            }
         }
 
         public ActionHistoryViewModel ActionHistoryViewModel {

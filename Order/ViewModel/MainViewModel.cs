@@ -1,4 +1,6 @@
 using GalaSoft.MvvmLight;
+using Order.Model;
+using Order.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,28 +16,50 @@ namespace Order.ViewModel {
         private TcpClient client;
         private ClientData clientData;
         private Dictionary<int, IViewModelBase> _iViewModelBases = new Dictionary<int, IViewModelBase>();
-        //public Dictionary<int, ViewModelBase> _viewModels = new Dictionary<int, ViewModelBase>();
-        public MainViewModel() {
+        private IDispatcher _dispatcher;
+        private ViewModelLocator _locator = new ViewModelLocator();
+        public MainViewModel(IDispatcher dispatcher) {
             initViewModelBases();
             initThread();
+            _dispatcher = dispatcher;
         }
 
         private void initViewModelBases() {
             for (int i = 0; i < 9; i++) {
                 var viewModel = new IViewModelBase();
                 _iViewModelBases[i] = viewModel;
-                //_viewModels[i] = _iViewModelBases[i];
             }
         }
-
-        // ==== Tcp Item ====
-        #region
         private void initThread() {
             thr = new Thread(new ThreadStart(AsyncServerStart));
             thr.IsBackground = true;
             thr.Start();
         }
+        private void addGridThread() {
+            thr = new Thread(new ThreadStart(AddDataGrid));
+            thr.IsBackground = true;
+            thr.Start();
+        }
+        /*private void underBarThread() {
+            thr = new Thread(new ThreadStart(AddUnderView));
+            thr.IsBackground = true;
+            thr.Start();
+        }
+*/
 
+        /*public void AddUnderView() {
+            IViewModelBase viewModelBase = new IViewModelBase {
+                TotalOrder = TotalOrder,
+                TotalClear = TotalClear,
+            };
+
+            UnderBarViewModel = viewModelBase;
+            *//*_dispatcher.Invoke(() => {
+                UnderBarViewModel = viewModelBase;
+            });*//*
+        }*/
+
+        #region TCP ITEM
         private void AsyncServerStart() {
             try {
                 TcpListener listener = new TcpListener(new IPEndPoint(IPAddress.Any, 9999));
@@ -58,40 +82,45 @@ namespace Order.ViewModel {
                 string readString = Encoding.Default.GetString(callbackClient.readByteData, 0, bytesRead);
 
                 ReadMsgNumber(callbackClient.clientNumber, readString);
+                addGridThread();
 
                 callbackClient.client.GetStream().BeginRead(callbackClient.readByteData, 0, callbackClient.readByteData.Length, new AsyncCallback(DataReceived), callbackClient);
             } catch (Exception e) {
             }
         }
 
-
-        public ObservableCollection<IViewModelBase> DataGridItem { get; set; }
         public void ReadMsgNumber(int clientNumber, string readString) {
             int idx = clientNumber - 1;
             IViewModelBase viewModel = _iViewModelBases[idx];
             viewModel.ItemTitle = "AA" + clientNumber;
 
             if (readString == "Order") {
+                TotalOrder++;
+
                 viewModel.OrderCount++;
-                viewModel.OrderTime = DateTime.Now.ToString("hh:mm:tt");
-                viewModel.ItemTitle = viewModel.ItemTitle;
+                gridTitle = viewModel.ItemTitle;
+                orderTime = DateTime.Now.ToString("hh:mm:tt");
+                clearTime = "";
+
             } else if (readString == "Clear") {
+                TotalClear++;
+
                 viewModel.OrderClearCount++;
-                viewModel.OrderClearTime = DateTime.Now.ToString("hh:mm:tt");
-                viewModel.ItemTitle = viewModel.ItemTitle;
+                gridTitle = viewModel.ItemTitle;
+                clearTime = DateTime.Now.ToString("hh:mm:tt");
+                orderTime = "";
             }
 
             AddViewChange(viewModel, clientNumber);
-
-            // 2023.03.13 스터디 종료 , 현재 아래 코드 현재 하나만 구현가능 반복적인 작업 수행하기위한 코드 진행해야함 
-
-            DataGridItem = new ObservableCollection<IViewModelBase>() {
-                new IViewModelBase{ ItemTitle = viewModel.ItemTitle, OrderTime = viewModel.OrderTime , OrderClearTime = viewModel.OrderClearTime }
-            };
         }
+        
 
         public void AddViewChange(IViewModelBase viewModels, int clientNumber) {
-            IViewModelBase addViewItem = new IViewModelBase(viewModels.ItemTitle, viewModels.OrderCount, viewModels.OrderClearCount);
+            IViewModelBase addViewItem = new IViewModelBase {
+                ItemTitle = viewModels.ItemTitle,
+                OrderCount = viewModels.OrderCount,
+                OrderClearCount = viewModels.OrderClearCount
+            };
             switch (clientNumber) {
                 case 1:
                     CurrentViewModel = addViewItem;
@@ -122,8 +151,49 @@ namespace Order.ViewModel {
                     break;
             }
         }
-        private ViewModelBase _currentViewModel;
 
+
+        #region DataGrid ActionHistory
+        private ObservableCollection<MainModel> _dataGridItem = null;
+        public ObservableCollection<MainModel> DataGridItem {
+            get {
+                if (_dataGridItem == null) {
+                    _dataGridItem = new ObservableCollection<MainModel>();
+                }
+                return _dataGridItem;
+            }
+            set {
+                _dataGridItem = value;
+            }
+        }
+
+        private string orderTime;
+        private string clearTime;
+        private string gridTitle;
+        public void AddDataGrid() {
+            MainModel model = new MainModel();
+            model.OrderTime = orderTime;
+            model.OrderClearTime = clearTime;
+            model.GridTitle = gridTitle;
+            _dispatcher.Invoke(() => {
+                DataGridItem.Add(model);
+            });
+        }
+        #endregion
+        #endregion
+
+        #region CurrentViewModel List
+        private ViewModelBase _currentViewModel ;
+        
+        public ViewModelBase UnderBarViewModel {
+            get { return _currentViewModel; }
+            set {
+                if (_currentViewModel != value) {
+                    Set<ViewModelBase>(ref _currentViewModel, value);
+                    _currentViewModel.RaisePropertyChanged("UnderBarViewModel");
+                }
+            }
+        }
         public ViewModelBase CurrentViewModel {
             get {
                 return _currentViewModel;
@@ -231,7 +301,7 @@ namespace Order.ViewModel {
                 }
             }
         }
-
         #endregion
+
     }
 }
