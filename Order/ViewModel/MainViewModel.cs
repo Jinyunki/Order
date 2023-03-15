@@ -1,4 +1,3 @@
-using GalaSoft.MvvmLight;
 using Order.Model;
 using Order.Utiles;
 using System;
@@ -10,7 +9,7 @@ using System.Text;
 using System.Threading;
 
 namespace Order.ViewModel {
-    //branch Test
+
     public class MainViewModel : IViewModelBase {
         private TcpListener listener;
         private Thread thr;
@@ -29,36 +28,22 @@ namespace Order.ViewModel {
             for (int i = 0; i < 9; i++) {
                 var viewModel = new IViewModelBase();
                 _iViewModelBases[i] = viewModel;
+                CurrentView.Add(viewModel);
             }
         }
+        // Main 실시간 화면
         private void initThread() {
             thr = new Thread(new ThreadStart(AsyncServerStart));
             thr.IsBackground = true;
             thr.Start();
         }
+        // 조치내역
         private void addGridThread() {
             thr = new Thread(new ThreadStart(AddDataGrid));
             thr.IsBackground = true;
             thr.Start();
         }
-        /*private void underBarThread() {
-            thr = new Thread(new ThreadStart(AddUnderView));
-            thr.IsBackground = true;
-            thr.Start();
-        }
-*/
-
-        /*public void AddUnderView() {
-            IViewModelBase viewModelBase = new IViewModelBase {
-                TotalOrder = TotalOrder,
-                TotalClear = TotalClear,
-            };
-
-            UnderBarViewModel = viewModelBase;
-            *//*_dispatcher.Invoke(() => {
-                UnderBarViewModel = viewModelBase;
-            });*//*
-        }*/
+        
 
         #region TCP ITEM
         private void AsyncServerStart() {
@@ -122,34 +107,13 @@ namespace Order.ViewModel {
                 OrderCount = viewModels.OrderCount,
                 OrderClearCount = viewModels.OrderClearCount
             };
-            switch (clientNumber) {
-                case 1:
-                    CurrentViewModel = addViewItem;
+
+            // 들어온 clientNumber값과 포문의 인트값이 동일할때 CurrentView[index-1] = gridView갱신
+            for (int i = 1; i <= 9; i++) {
+                if (clientNumber == i) {
+                    CurrentView[i - 1] = addViewItem;
                     break;
-                case 2:
-                    CurrentViewModel2 = addViewItem;
-                    break;
-                case 3:
-                    CurrentViewModel3 = addViewItem;
-                    break;
-                case 4:
-                    CurrentViewModel4 = addViewItem;
-                    break;
-                case 5:
-                    CurrentViewModel5 = addViewItem;
-                    break;
-                case 6:
-                    CurrentViewModel6 = addViewItem;
-                    break;
-                case 7:
-                    CurrentViewModel7 = addViewItem;
-                    break;
-                case 8:
-                    CurrentViewModel8 = addViewItem;
-                    break;
-                case 9:
-                    CurrentViewModel9 = addViewItem;
-                    break;
+                }
             }
         }
 
@@ -181,127 +145,22 @@ namespace Order.ViewModel {
             });
         }
         #endregion
+
+        #region RealTime Current
+        private ObservableCollection<IViewModelBase> _currentView = null;
+        public ObservableCollection<IViewModelBase> CurrentView {
+            get {
+                if (_currentView == null) {
+                    _currentView = new ObservableCollection<IViewModelBase>();
+                }
+                return _currentView;
+            }
+            set {
+                _currentView = value;
+            }
+        }
         #endregion
 
-        #region CurrentViewModel List
-        private ViewModelBase _currentViewModel ;
-        
-        public ViewModelBase UnderBarViewModel {
-            get { return _currentViewModel; }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("UnderBarViewModel");
-                }
-            }
-        }
-        public ViewModelBase CurrentViewModel {
-            get {
-                return _currentViewModel;
-            }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("CurrentViewModel");
-                }
-            }
-        }
-
-        public ViewModelBase CurrentViewModel2 {
-            get {
-                return _currentViewModel;
-            }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("CurrentViewModel2");
-                }
-            }
-        }
-
-        public ViewModelBase CurrentViewModel3 {
-            get {
-                return _currentViewModel;
-            }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("CurrentViewModel3");
-                }
-            }
-        }
-
-        public ViewModelBase CurrentViewModel4 {
-            get {
-                return _currentViewModel;
-            }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("CurrentViewModel4");
-                }
-            }
-        }
-
-        public ViewModelBase CurrentViewModel5 {
-            get {
-                return _currentViewModel;
-            }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("CurrentViewModel5");
-                }
-            }
-        }
-
-        public ViewModelBase CurrentViewModel6 {
-            get {
-                return _currentViewModel;
-            }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("CurrentViewModel6");
-                }
-            }
-        }
-
-        public ViewModelBase CurrentViewModel7 {
-            get {
-                return _currentViewModel;
-            }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("CurrentViewModel7");
-                }
-            }
-        }
-
-        public ViewModelBase CurrentViewModel8 {
-            get {
-                return _currentViewModel;
-            }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("CurrentViewModel8");
-                }
-            }
-        }
-
-        public ViewModelBase CurrentViewModel9 {
-            get {
-                return _currentViewModel;
-            }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("CurrentViewModel9");
-                }
-            }
-        }
         #endregion
 
     }

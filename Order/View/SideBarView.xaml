@@ -21,56 +21,54 @@
             <view:ActionHistory />
         </DataTemplate>
     </UserControl.Resources>
-    
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="9*"/>
-        </Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="9*"/>
+            </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
+            <Grid Grid.Column="0" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <!--RealTime-->
-            <Grid Grid.Row="0">
-                <Button Content="실시간 현황" Background="White"
+                <!--RealTime-->
+                <Grid Grid.Row="0">
+                    <Button Content="실시간 현황" Background="White"
                         Command="{Binding ViewChangeCommand}"
                         CommandParameter="RealTimeView"/>
-            </Grid>
+                </Grid>
 
-            <!--History-->
-            <Grid Grid.Row="1">
-                <Button Content="조치 내역" Background="White"
+                <!--History-->
+                <Grid Grid.Row="1">
+                    <Button Content="조치 내역" Background="White"
                         Command="{Binding ViewChangeCommand}"
                         CommandParameter="ActionHistoryViewModel"/>
-            </Grid>
+                </Grid>
 
-            <!--Third-->
-            <Grid Grid.Row="2">
-                <Button Content="통계" Background="White"
+                <!--Third-->
+                <Grid Grid.Row="2">
+                    <Button Content="통계" Background="White"
                         Command="{Binding ViewChangeCommand}" 
                         CommandParameter="StatsViewModel"/>
-            </Grid>
-            <!--Fourd-->
-            <Grid Grid.Row="3">
-                <Button Content="주의 사항" Background="White"/>
+                </Grid>
+                <!--Fourd-->
+                <Grid Grid.Row="3">
+                    <Button Content="주의 사항" Background="White"/>
+                </Grid>
+
+                <!--Last-->
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
             </Grid>
 
-            <!--Last-->
-            <Grid Grid.Row="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-            </Grid>
-        </Grid>
-
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Margin="5">
             <ScrollViewer>
                 <Grid Visibility="{Binding IsVisibleContent, 
                     Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -85,4 +83,5 @@
             </Grid>
         </Grid>
     </Grid>
+    
 </UserControl>

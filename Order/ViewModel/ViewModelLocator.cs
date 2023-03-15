@@ -32,7 +32,6 @@ namespace Order.ViewModel {
             SimpleIoc.Default.Register<IDispatcher, DispatcherWrapper>();
 
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<UnderBarViewModel>();
             SimpleIoc.Default.Register<SideBarViewModel>();
             SimpleIoc.Default.Register<RealTimeViewModel>();
             SimpleIoc.Default.Register<ActionHistoryViewModel>();
@@ -60,12 +59,6 @@ namespace Order.ViewModel {
         public SideBarViewModel SideBarViewModel {
             get {
                 return ServiceLocator.Current.GetInstance<SideBarViewModel>();
-            }
-        }
-
-        public UnderBarViewModel UnderBarViewModel {
-            get {
-                return ServiceLocator.Current.GetInstance<UnderBarViewModel>();
             }
         }
 

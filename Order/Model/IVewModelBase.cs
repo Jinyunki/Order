@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 

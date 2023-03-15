@@ -81,13 +81,11 @@
     <Compile Include="Utiles\IDispatcher.cs" />
     <Compile Include="Utiles\IMessageBoxService.cs" />
     <Compile Include="ViewModel\ActionHistoryViewModel.cs" />
-    <Compile Include="ViewModel\IVewModelBase.cs" />
+    <Compile Include="Model\IVewModelBase.cs" />
     <Compile Include="ViewModel\RealTimeItemViewModel.cs" />
     <Compile Include="ViewModel\RealTimeViewModel.cs" />
     <Compile Include="ViewModel\SideBarViewModel.cs" />
-    <Compile Include="Model\UnderBarModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\UnderBarViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ActionHistory.xaml.cs">
       <DependentUpon>ActionHistory.xaml</DependentUpon>
@@ -100,9 +98,6 @@
     </Compile>
     <Compile Include="View\SideBarView.xaml.cs">
       <DependentUpon>SideBarView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\UnderBarView.xaml.cs">
-      <DependentUpon>UnderBarView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -129,10 +124,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SideBarView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\UnderBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
