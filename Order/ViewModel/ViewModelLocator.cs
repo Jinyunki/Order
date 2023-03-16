@@ -35,15 +35,13 @@ namespace Order.ViewModel {
             SimpleIoc.Default.Register<SideBarViewModel>();
             SimpleIoc.Default.Register<RealTimeViewModel>();
             SimpleIoc.Default.Register<ActionHistoryViewModel>();
-            SimpleIoc.Default.Register<RealTimeItemViewModel>();
+            SimpleIoc.Default.Register<StatsViewModel>();
         }
-
-        public RealTimeItemViewModel RealTimeItemViewModel {
+        public StatsViewModel StatsViewModel {
             get {
-                return ServiceLocator.Current.GetInstance<RealTimeItemViewModel>();
+                return ServiceLocator.Current.GetInstance<StatsViewModel>();
             }
         }
-
         public ActionHistoryViewModel ActionHistoryViewModel {
             get {
                 return ServiceLocator.Current.GetInstance<ActionHistoryViewModel>();

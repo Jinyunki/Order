@@ -1,3 +1,6 @@
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
 using Order.Model;
 using Order.Utiles;
 using System;
@@ -11,24 +14,30 @@ using System.Threading;
 namespace Order.ViewModel {
 
     public class MainViewModel : IViewModelBase {
-        private TcpListener listener;
         private Thread thr;
-        private TcpClient client;
-        private ClientData clientData;
         private Dictionary<int, IViewModelBase> _iViewModelBases = new Dictionary<int, IViewModelBase>();
         private IDispatcher _dispatcher;
-        private ViewModelLocator _locator = new ViewModelLocator();
+        private const string ORDER_STRING = "Order";
+        private const string CLEAR_STRING = "Clear";
+
+        private string orderTime;
+        private string clearTime;
+        private string gridTitle;
+
         public MainViewModel(IDispatcher dispatcher) {
             initViewModelBases();
             initThread();
             _dispatcher = dispatcher;
+
         }
 
         private void initViewModelBases() {
+            //Labels = new string[9];
             for (int i = 0; i < 9; i++) {
                 var viewModel = new IViewModelBase();
                 _iViewModelBases[i] = viewModel;
                 CurrentView.Add(viewModel);
+                //Labels[i] = $"AA{i + 1}호기";
             }
         }
         // Main 실시간 화면
@@ -43,36 +52,43 @@ namespace Order.ViewModel {
             thr.IsBackground = true;
             thr.Start();
         }
-        
 
+        private void addStats() {
+            thr = new Thread(new ThreadStart(initStats));
+            thr.IsBackground = true;
+            thr.Start();
+        }
         #region TCP ITEM
         private void AsyncServerStart() {
             try {
                 TcpListener listener = new TcpListener(new IPEndPoint(IPAddress.Any, 9999));
                 listener.Start();
                 Console.WriteLine("서버를 시작합니다.");
+
                 while (true) {
-                    TcpClient acceptClient = listener.AcceptTcpClient(); // 시작시 작동
+                    TcpClient acceptClient = listener.AcceptTcpClient();
 
-                    ClientData clientData = new ClientData(acceptClient); // 연결 응답이 왔을때 작동
+                    var clientData = new ClientData(acceptClient);
 
-                    clientData.client.GetStream().BeginRead(clientData.readByteData, 0, clientData.readByteData.Length, new AsyncCallback(DataReceived), clientData);
+                    BeginRead(clientData);
                 }
-            } catch (Exception e) { }
+            } catch (Exception e) {
+                Console.WriteLine("AsyncServerStart Exception : " + e);
+            }
         }
 
-        private void DataReceived(IAsyncResult ar) {
-            try {
-                ClientData callbackClient = ar.AsyncState as ClientData;
-                int bytesRead = callbackClient.client.GetStream().EndRead(ar);
-                string readString = Encoding.Default.GetString(callbackClient.readByteData, 0, bytesRead);
-
-                ReadMsgNumber(callbackClient.clientNumber, readString);
-                addGridThread();
-
-                callbackClient.client.GetStream().BeginRead(callbackClient.readByteData, 0, callbackClient.readByteData.Length, new AsyncCallback(DataReceived), callbackClient);
-            } catch (Exception e) {
-            }
+        private void BeginRead(ClientData clientData) {
+            clientData.client.GetStream().BeginRead(clientData.readByteData, 0, clientData.readByteData.Length, ar => {
+                try {
+                    int bytesRead = clientData.client.GetStream().EndRead(ar);
+                    ReadMsgNumber(clientData.clientNumber, Encoding.Default.GetString(clientData.readByteData, 0, bytesRead));
+                    addGridThread();
+                    addStats();
+                    BeginRead(clientData);
+                } catch (Exception e) {
+                    Console.WriteLine("BeginRead Exception: " + e);
+                }
+            }, null);
         }
 
         public void ReadMsgNumber(int clientNumber, string readString) {
@@ -80,7 +96,7 @@ namespace Order.ViewModel {
             IViewModelBase viewModel = _iViewModelBases[idx];
             viewModel.ItemTitle = "AA" + clientNumber;
 
-            if (readString == "Order") {
+            if (readString == ORDER_STRING) {
                 TotalOrder++;
 
                 viewModel.OrderCount++;
@@ -88,7 +104,7 @@ namespace Order.ViewModel {
                 orderTime = DateTime.Now.ToString("hh:mm:tt");
                 clearTime = "";
 
-            } else if (readString == "Clear") {
+            } else if (readString == CLEAR_STRING) {
                 TotalClear++;
 
                 viewModel.OrderClearCount++;
@@ -99,7 +115,7 @@ namespace Order.ViewModel {
 
             AddViewChange(viewModel, clientNumber);
         }
-        
+
 
         public void AddViewChange(IViewModelBase viewModels, int clientNumber) {
             IViewModelBase addViewItem = new IViewModelBase {
@@ -109,14 +125,48 @@ namespace Order.ViewModel {
             };
 
             // 들어온 clientNumber값과 포문의 인트값이 동일할때 CurrentView[index-1] = gridView갱신
-            for (int i = 1; i <= 9; i++) {
-                if (clientNumber == i) {
-                    CurrentView[i - 1] = addViewItem;
-                    break;
+            // dispatcher로 Thread를 사용하여 CurrentView할당
+            _dispatcher.Invoke(() => {
+                for (int i = 1; i <= 9; i++) {
+                    if (clientNumber == i) {
+                        CurrentView[i - 1] = addViewItem;
+                        break;
+                    }
                 }
+            });
+
+        }
+
+        // 2023-03-16 스터디 종료 차트갱신과 , 적용 해야함
+        #region StatsView
+        private SeriesCollection _seriesCollection;
+        public SeriesCollection SeriesCollection {
+            get { return _seriesCollection; }
+            set {
+                _seriesCollection = value;
+                RaisePropertyChanged("SeriesCollection");
             }
         }
 
+        public void initStats() {
+            _dispatcher.Invoke(() => {
+                SeriesCollection = new SeriesCollection {
+                new ColumnSeries {
+                    Title = "Column Series",
+                    Values = new ChartValues<ObservableValue> {
+                        new ObservableValue(10),
+                        new ObservableValue(20),
+                        new ObservableValue(30),
+                        new ObservableValue(40) }
+                    }
+                };
+            });
+
+
+        }
+
+
+        #endregion
 
         #region DataGrid ActionHistory
         private ObservableCollection<MainModel> _dataGridItem = null;
@@ -131,10 +181,6 @@ namespace Order.ViewModel {
                 _dataGridItem = value;
             }
         }
-
-        private string orderTime;
-        private string clearTime;
-        private string gridTitle;
         public void AddDataGrid() {
             MainModel model = new MainModel();
             model.OrderTime = orderTime;

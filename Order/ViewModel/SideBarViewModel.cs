@@ -7,8 +7,7 @@ namespace Order.ViewModel {
         private ViewModelLocator _locator = new ViewModelLocator();
         public SideBarViewModel() {
             _messageBoxService = new MessageBoxService();
-            IsVisibleContent = false;
-            IsVisibleGrid = true;
+            CurrentViewModel = _locator.RealTimeViewModel;
             initButtonEvent();
         }
 
@@ -58,22 +57,17 @@ namespace Order.ViewModel {
 
         private Command<RealTimeViewModel> _btnRealTime;
         private Command<ActionHistoryViewModel> _btnActionHistor;
+        private Command<StatsViewModel> _btnStatsViewModel;
         // Button Type Event
         public RelayCommand<string> ViewChangeCommand {
             get {
                 return new RelayCommand<string>((confType) => {
                     if (confType == "RealTimeView") {
-                        IsVisibleContent = false;
-                        IsVisibleGrid = true;
-                        //CurrentViewModel = _locator.RealTimeViewModel;
+                        CurrentViewModel = _locator.RealTimeViewModel;
                     } else if (confType == "ActionHistoryViewModel") {
-                        IsVisibleContent = true;
-                        IsVisibleGrid = false;
                         CurrentViewModel = _locator.ActionHistoryViewModel;
-                    } else if (confType == "MainGoBack") {
-                        IsVisibleContent = true;
-                        IsVisibleGrid = false;
-                        // CurrentViewModel 현재 미완성
+                    } else if (confType == "StatsViewModel") {
+                        CurrentViewModel = _locator.StatsViewModel;
                     }
                 });
             }
@@ -83,6 +77,10 @@ namespace Order.ViewModel {
         private void initButtonEvent() {
             _btnRealTime = new Command<RealTimeViewModel>(CommandExecute, CommandCanExecute);
             _btnActionHistor = new Command<ActionHistoryViewModel>(CommandExecuteAction, CommandCanExecute);
+            _btnStatsViewModel = new Command<StatsViewModel>(CommandExecuteStats, CommandCanExecute);
+        }
+        private void CommandExecuteStats(StatsViewModel obj) {
+            this.CurrentViewModel = obj;
         }
         private void CommandExecuteAction(ActionHistoryViewModel obj) {
             this.CurrentViewModel = obj;

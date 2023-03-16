@@ -20,6 +20,9 @@
         <DataTemplate DataType="{x:Type vm:ActionHistoryViewModel}">
             <view:ActionHistory />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:StatsViewModel}">
+            <view:StatsView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -70,17 +73,11 @@
 
         <Grid Grid.Column="1" Margin="5">
             <ScrollViewer>
-                <Grid Visibility="{Binding IsVisibleContent, 
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid>
                     <ContentControl Content="{Binding CurrentViewModel, 
                         UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </ScrollViewer>
-            <!---->
-            <Grid Visibility="{Binding IsVisibleGrid, 
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
-                <view:RealTime/>
-            </Grid>
         </Grid>
     </Grid>
     
