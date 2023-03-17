@@ -32,12 +32,12 @@ namespace Order.ViewModel {
         }
 
         private void initViewModelBases() {
-            //Labels = new string[9];
+            Labels = new string[9];
             for (int i = 0; i < 9; i++) {
                 var viewModel = new IViewModelBase();
                 _iViewModelBases[i] = viewModel;
                 CurrentView.Add(viewModel);
-                //Labels[i] = $"AA{i + 1}호기";
+                Labels[i] = $"AA{i + 1}호기";
             }
         }
         // Main 실시간 화면
@@ -99,7 +99,8 @@ namespace Order.ViewModel {
             if (readString == ORDER_STRING) {
                 TotalOrder++;
 
-                viewModel.OrderCount++;
+                viewModel.OrderCount++; // realtime data
+                viewModel.TotalOrder++; // stats data
                 gridTitle = viewModel.ItemTitle;
                 orderTime = DateTime.Now.ToString("hh:mm:tt");
                 clearTime = "";
@@ -107,7 +108,8 @@ namespace Order.ViewModel {
             } else if (readString == CLEAR_STRING) {
                 TotalClear++;
 
-                viewModel.OrderClearCount++;
+                viewModel.OrderClearCount++; // realtime data
+                viewModel.TotalClear++; // stats data
                 gridTitle = viewModel.ItemTitle;
                 clearTime = DateTime.Now.ToString("hh:mm:tt");
                 orderTime = "";
@@ -137,7 +139,6 @@ namespace Order.ViewModel {
 
         }
 
-        // 2023-03-16 스터디 종료 차트갱신과 , 적용 해야함
         #region StatsView
         private SeriesCollection _seriesCollection;
         public SeriesCollection SeriesCollection {
@@ -147,25 +148,24 @@ namespace Order.ViewModel {
                 RaisePropertyChanged("SeriesCollection");
             }
         }
+        public string[] Labels { get; set; }
 
         public void initStats() {
+            ChartValues<ObservableValue> chartValues = new ChartValues<ObservableValue>();
+            for (int i = 0; i < _iViewModelBases.Count; i++) {
+                chartValues.Add(new ObservableValue(_iViewModelBases[i].TotalOrder));
+            }
             _dispatcher.Invoke(() => {
                 SeriesCollection = new SeriesCollection {
                 new ColumnSeries {
-                    Title = "Column Series",
-                    Values = new ChartValues<ObservableValue> {
-                        new ObservableValue(10),
-                        new ObservableValue(20),
-                        new ObservableValue(30),
-                        new ObservableValue(40) }
+                    Title = "Today Order Count",
+                    Values = chartValues,
+                    DataLabels = true, // enable data labels
+                    LabelPoint = point => Labels[(int)point.X],
                     }
                 };
             });
-
-
         }
-
-
         #endregion
 
         #region DataGrid ActionHistory

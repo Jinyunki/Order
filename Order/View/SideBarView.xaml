@@ -59,7 +59,7 @@
                 </Grid>
                 <!--Fourd-->
                 <Grid Grid.Row="3">
-                    <Button Content="주의 사항" Background="White"/>
+                    <Button Content="이슈 사진" Background="White"/>
                 </Grid>
 
                 <!--Last-->

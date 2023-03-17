@@ -72,7 +72,7 @@ namespace Order.ViewModel {
                 } else {
                     _orderCount = value;
                     if (value > 10) {
-                        _orderCount = 0;
+                        _orderCount = 1;
                     }
                     OnPropertyChanged("OrderCount");
                 }
@@ -91,7 +91,7 @@ namespace Order.ViewModel {
                 } else {
                     _orderClearCount = value;
                     if (value > 10) {
-                        _orderClearCount = 0;
+                        _orderClearCount = 1;
                     }
                 OnPropertyChanged("OrderClearCount");
                 }

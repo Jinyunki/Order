@@ -10,12 +10,7 @@
              DataContext="{Binding Source={StaticResource Locator} ,Path=Main}">
     <Grid>
         <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Top">
-            <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="설비명" Labels="{Binding Labels}"/>
-            </lvc:CartesianChart.AxisX>
-            <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Value" />
-            </lvc:CartesianChart.AxisY>
+            
         </lvc:CartesianChart>
     </Grid>
 </UserControl>
