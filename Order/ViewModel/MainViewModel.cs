@@ -5,7 +5,6 @@ using Order.Model;
 using Order.Utiles;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -13,48 +12,47 @@ using System.Threading;
 
 namespace Order.ViewModel {
 
-    public class MainViewModel : IViewModelBase {
+    public class MainViewModel : MainModel {
         private Thread thr;
-        private Dictionary<int, IViewModelBase> _iViewModelBases = new Dictionary<int, IViewModelBase>();
+        private Dictionary<int, MainModel> _mainModelBases = new Dictionary<int, MainModel>();
         private IDispatcher _dispatcher;
         private const string ORDER_STRING = "Order";
         private const string CLEAR_STRING = "Clear";
 
-        private string orderTime;
-        private string clearTime;
-        private string gridTitle;
+        private string _callTime;
+        private string _dataState;
+        private string _gridTitle;
 
         public MainViewModel(IDispatcher dispatcher) {
-            initViewModelBases();
-            initThread();
+            ViewCurrentBases();
+            TcpThread();
             _dispatcher = dispatcher;
-
         }
 
-        private void initViewModelBases() {
+        private void ViewCurrentBases() {
             Labels = new string[9];
             for (int i = 0; i < 9; i++) {
-                var viewModel = new IViewModelBase();
-                _iViewModelBases[i] = viewModel;
+                var viewModel = new MainModel();
+                _mainModelBases[i] = viewModel;
                 CurrentView.Add(viewModel);
-                Labels[i] = $"AA{i + 1}호기";
+                Labels[i] = $"AA{i + 1}호";
             }
         }
-        // Main 실시간 화면
-        private void initThread() {
+        // 실시간 Thread
+        private void TcpThread() {
             thr = new Thread(new ThreadStart(AsyncServerStart));
             thr.IsBackground = true;
             thr.Start();
         }
-        // 조치내역
-        private void addGridThread() {
-            thr = new Thread(new ThreadStart(AddDataGrid));
+        // 조치내역 Thread
+        private void ActionHistoryThread() {
+            thr = new Thread(new ThreadStart(ActionHistoryData));
             thr.IsBackground = true;
             thr.Start();
         }
-
-        private void addStats() {
-            thr = new Thread(new ThreadStart(initStats));
+        // 통계 Thread
+        private void StatsThread() {
+            thr = new Thread(new ThreadStart(StatsData));
             thr.IsBackground = true;
             thr.Start();
         }
@@ -82,8 +80,8 @@ namespace Order.ViewModel {
                 try {
                     int bytesRead = clientData.client.GetStream().EndRead(ar);
                     ReadMsgNumber(clientData.clientNumber, Encoding.Default.GetString(clientData.readByteData, 0, bytesRead));
-                    addGridThread();
-                    addStats();
+                    ActionHistoryThread();
+                    StatsThread();
                     BeginRead(clientData);
                 } catch (Exception e) {
                     Console.WriteLine("BeginRead Exception: " + e);
@@ -91,36 +89,36 @@ namespace Order.ViewModel {
             }, null);
         }
 
+        public string SetColor { get; set; }
+
+        #region ClientMsgCatch
         public void ReadMsgNumber(int clientNumber, string readString) {
             int idx = clientNumber - 1;
-            IViewModelBase viewModel = _iViewModelBases[idx];
+            MainModel viewModel = _mainModelBases[idx];
             viewModel.ItemTitle = "AA" + clientNumber;
 
             if (readString == ORDER_STRING) {
-                TotalOrder++;
-
                 viewModel.OrderCount++; // realtime data
                 viewModel.TotalOrder++; // stats data
-                gridTitle = viewModel.ItemTitle;
-                orderTime = DateTime.Now.ToString("hh:mm:tt");
-                clearTime = "";
+                _gridTitle = viewModel.ItemTitle;
+                _callTime = DateTime.Now.ToString("hh:mm:tt");
+                _dataState = "대기중";
 
             } else if (readString == CLEAR_STRING) {
-                TotalClear++;
-
                 viewModel.OrderClearCount++; // realtime data
                 viewModel.TotalClear++; // stats data
-                gridTitle = viewModel.ItemTitle;
-                clearTime = DateTime.Now.ToString("hh:mm:tt");
-                orderTime = "";
+                _gridTitle = viewModel.ItemTitle;
+                _callTime = DateTime.Now.ToString("hh:mm:tt");
+                _dataState = "조치 완료";
             }
 
-            AddViewChange(viewModel, clientNumber);
+            RealTimeData(viewModel, clientNumber);
         }
+        #endregion
 
-
-        public void AddViewChange(IViewModelBase viewModels, int clientNumber) {
-            IViewModelBase addViewItem = new IViewModelBase {
+        #region RealTimeView
+        public void RealTimeData(MainModel viewModels, int clientNumber) {
+            MainModel addViewItem = new MainModel {
                 ItemTitle = viewModels.ItemTitle,
                 OrderCount = viewModels.OrderCount,
                 OrderClearCount = viewModels.OrderClearCount
@@ -136,78 +134,49 @@ namespace Order.ViewModel {
                     }
                 }
             });
-
         }
+        #endregion
 
         #region StatsView
-        private SeriesCollection _seriesCollection;
-        public SeriesCollection SeriesCollection {
-            get { return _seriesCollection; }
-            set {
-                _seriesCollection = value;
-                RaisePropertyChanged("SeriesCollection");
-            }
-        }
-        public string[] Labels { get; set; }
-
-        public void initStats() {
-            ChartValues<ObservableValue> chartValues = new ChartValues<ObservableValue>();
-            for (int i = 0; i < _iViewModelBases.Count; i++) {
-                chartValues.Add(new ObservableValue(_iViewModelBases[i].TotalOrder));
+        public void StatsData() {
+            ChartValues<ObservableValue> _orderValue = new ChartValues<ObservableValue>();
+            ChartValues<ObservableValue> _clearValue = new ChartValues<ObservableValue>();
+            for (int i = 0; i < _mainModelBases.Count; i++) {
+                _orderValue.Add(new ObservableValue(_mainModelBases[i].TotalOrder));
+                _clearValue.Add(new ObservableValue(_mainModelBases[i].TotalClear));
             }
             _dispatcher.Invoke(() => {
                 SeriesCollection = new SeriesCollection {
+                
+                // total order Count
                 new ColumnSeries {
-                    Title = "Today Order Count",
-                    Values = chartValues,
+                    Title = "Total Order Count",
+                    Values = _orderValue,
                     DataLabels = true, // enable data labels
                     LabelPoint = point => Labels[(int)point.X],
+                    },
+
+                // total clear Count
+                new ColumnSeries {
+                    Title = "Total Clear Count",
+                    Values = _clearValue,
                     }
                 };
             });
         }
         #endregion
 
-        #region DataGrid ActionHistory
-        private ObservableCollection<MainModel> _dataGridItem = null;
-        public ObservableCollection<MainModel> DataGridItem {
-            get {
-                if (_dataGridItem == null) {
-                    _dataGridItem = new ObservableCollection<MainModel>();
-                }
-                return _dataGridItem;
-            }
-            set {
-                _dataGridItem = value;
-            }
-        }
-        public void AddDataGrid() {
-            MainModel model = new MainModel();
-            model.OrderTime = orderTime;
-            model.OrderClearTime = clearTime;
-            model.GridTitle = gridTitle;
+        #region ActionHistoryView
+        public void ActionHistoryData() {
+            ActionHistoryModel model = new ActionHistoryModel();
+            model.CallTime = _callTime;
+            model.DataState = _dataState;
+            model.GridTitle = _gridTitle;
             _dispatcher.Invoke(() => {
                 DataGridItem.Add(model);
             });
         }
         #endregion
-
-        #region RealTime Current
-        private ObservableCollection<IViewModelBase> _currentView = null;
-        public ObservableCollection<IViewModelBase> CurrentView {
-            get {
-                if (_currentView == null) {
-                    _currentView = new ObservableCollection<IViewModelBase>();
-                }
-                return _currentView;
-            }
-            set {
-                _currentView = value;
-            }
-        }
         #endregion
-
-        #endregion
-
     }
 }

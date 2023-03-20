@@ -82,12 +82,12 @@
     <Compile Include="ClientData.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Command.cs" />
-    <Compile Include="Model\MainModel.cs" />
+    <Compile Include="Model\ActionHistoryModel.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Utiles\IDispatcher.cs" />
     <Compile Include="Utiles\IMessageBoxService.cs" />
     <Compile Include="ViewModel\ActionHistoryViewModel.cs" />
-    <Compile Include="Model\IVewModelBase.cs" />
+    <Compile Include="Model\MainModel.cs" />
     <Compile Include="ViewModel\RealTimeViewModel.cs" />
     <Compile Include="ViewModel\SideBarViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

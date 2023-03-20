@@ -1,8 +1,7 @@
-﻿namespace Order.ViewModel {
-    public class RealTimeViewModel : IViewModelBase {
-        
-        public RealTimeViewModel() {
-        }
+﻿using GalaSoft.MvvmLight;
 
+namespace Order.ViewModel {
+    public class RealTimeViewModel : ViewModelBase{
+        public RealTimeViewModel() { }
     }
 }

@@ -34,8 +34,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
                 <!--RealTime-->
                 <Grid Grid.Row="0">
@@ -56,18 +55,6 @@
                     <Button Content="통계" Background="White"
                         Command="{Binding ViewChangeCommand}" 
                         CommandParameter="StatsViewModel"/>
-                </Grid>
-                <!--Fourd-->
-                <Grid Grid.Row="3">
-                    <Button Content="이슈 사진" Background="White"/>
-                </Grid>
-
-                <!--Last-->
-                <Grid Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
                 </Grid>
             </Grid>
 

@@ -16,10 +16,10 @@
             <DataGrid.Columns>
                 <DataGridTextColumn MinWidth="10" Width="1*" 
                                     Header="설비명" Binding="{Binding GridTitle}"/>
-                <DataGridTextColumn MinWidth="10" Width="1*" Foreground="Red"
-                                    Header="Order" Binding="{Binding OrderTime}"/>
-                <DataGridTextColumn MinWidth="10" Width="1*" Foreground="Blue"
-                                    Header="Clear" Binding="{Binding OrderClearTime}"/>
+                <DataGridTextColumn MinWidth="10" Width="1*" Foreground="Black"
+                                    Header="Order/Clear" Binding="{Binding CallTime}"/>
+                <DataGridTextColumn MinWidth="10" Width="1*" Foreground="Black"
+                                    Header="상태" Binding="{Binding DataState}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
